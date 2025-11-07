@@ -8,17 +8,11 @@ test_postcode_cache.py .............                                     [ 14%]
 test_postcode_cli.py ................................                    [ 50%]
 test_postcode_functions.py ............................................. [100%]
 
-============================== 90 passed in 6.04s ==============================
+============================== 90 passed in 6.19s ==============================
 ************* Module postcode_functions
-postcode_functions.py:33:59: C0303: Trailing whitespace (trailing-whitespace)
-postcode_functions.py:76:66: C0303: Trailing whitespace (trailing-whitespace)
-postcode_functions.py:31:15: W3101: Missing timeout argument for method 'req.get' can cause your program to hang indefinitely (missing-timeout)
 postcode_functions.py:24:0: R1710: Either all return statements in a function should return an expression, or none of them should. (inconsistent-return-statements)
-postcode_functions.py:45:15: W3101: Missing timeout argument for method 'req.get' can cause your program to hang indefinitely (missing-timeout)
-postcode_functions.py:60:15: W3101: Missing timeout argument for method 'req.get' can cause your program to hang indefinitely (missing-timeout)
 postcode_functions.py:53:0: R1710: Either all return statements in a function should return an expression, or none of them should. (inconsistent-return-statements)
-postcode_functions.py:77:15: W3101: Missing timeout argument for method 'req.post' can cause your program to hang indefinitely (missing-timeout)
 
 ------------------------------------------------------------------
-Your code has been rated at 8.96/10 (previous run: 8.96/10, +0.00)
+Your code has been rated at 9.74/10 (previous run: 9.74/10, +0.00)
 
