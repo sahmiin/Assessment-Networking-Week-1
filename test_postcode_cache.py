@@ -1,5 +1,7 @@
 """Tests for postcode caching functionality."""
 
+# pylint: skip-file
+
 import os
 import json
 import pytest
