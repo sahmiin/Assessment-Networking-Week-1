@@ -25,11 +25,18 @@ def validate_postcode(postcode: str) -> bool:
     """Returns a boolean as a check for valid postcodes."""
     if not isinstance(postcode, str):
         raise TypeError("Function expects a string.")
-    response = req.get(f"https://api.postcodes.io/postcodes/{postcode}/validate")
-    if response.status_code == 500:
-        raise req.RequestException("Unable to access API.")  
-    if response.status_code == 200:
-        return response.json()['result']
+    cache = load_cache()
+    if postcode in cache and 'valid' in cache[postcode] :
+            return cache[postcode]['valid']
+    else:
+        response = req.get(f"https://api.postcodes.io/postcodes/{postcode}/validate")
+        if response.status_code == 500:
+            raise req.RequestException("Unable to access API.")  
+        if response.status_code == 200:
+            cache[postcode] = {}
+            cache[postcode]['valid'] = response.json().get('result', False)
+            save_cache(cache)
+            return response.json()['result']
 
 
 def get_postcode_for_location(lat: float, long: float) -> str:
@@ -48,10 +55,18 @@ def get_postcode_completions(postcode_start: str) -> list[str]:
     """Returns a full postcode based on the beginning of a known postcode."""
     if not isinstance(postcode_start, str):
         raise TypeError("Function expects a string.")
+    cache = load_cache()
+    if postcode_start in cache and 'completions' in cache[postcode_start] :
+            return cache[postcode_start]['completions']
     response = req.get(f"https://api.postcodes.io/postcodes/{postcode_start}/autocomplete")
     if response.status_code == 500:
         raise req.RequestException("Unable to access API.")
-    return response.json()['result']
+    if response.status_code == 200:
+        cache[postcode_start] = {}
+        cache[postcode_start]['completions'] = response.json().get('result', False)
+        save_cache(cache)
+        print(response.json()['result'])
+        return response.json()['result']
 
 
 def get_postcodes_details(postcodes: list[str]) -> dict:
