@@ -5,6 +5,7 @@ import json
 import requests as req
 
 CACHE_FILE = "./postcode_cache.json"
+# pylint: disable=inconsistent-return-statements
 
 def load_cache() -> dict:
     """Loads the cache from a file and converts it from JSON to a dictionary."""
