@@ -20,6 +20,7 @@ def save_cache(cache: dict):
 
 
 def validate_postcode(postcode: str) -> bool:
+    """Returns a boolean as a check for valid postcodes."""
     if not isinstance(postcode, str):
         raise TypeError("Function expects a string.")
     response = req.get(f"https://api.postcodes.io/postcodes/{postcode}/validate")
@@ -33,11 +34,23 @@ def validate_postcode(postcode: str) -> bool:
 
 
 def get_postcode_for_location(lat: float, long: float) -> str:
-    pass
+    """Returns a postcode based on longitudinal and latitudinal location."""
+    if not isinstance(lat, float) or not isinstance(long, float):
+        raise TypeError("Function expects two floats.")
+    
+    response = req.get(f"https://api.postcodes.io/postcodes?lon={long}&lat={lat}")
+    
+    if response.status_code == 500:
+        raise req.RequestException("Unable to access API.")
+    
+    if response.json()['result'] == None:
+        raise ValueError("No relevant postcode found.")
+    
+    return response.json()['result'][0]['postcode']
 
 
 def get_postcode_completions(postcode_start: str) -> list[str]:
-    pass
+    """Returns postcode completions (...)"""
 
 
 def get_postcodes_details(postcodes: list[str]) -> dict:
