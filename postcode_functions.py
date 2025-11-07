@@ -28,9 +28,9 @@ def validate_postcode(postcode: str) -> bool:
     cache = load_cache()
     if postcode in cache and 'valid' in cache[postcode]:
         return cache[postcode]['valid']
-    response = req.get(f"https://api.postcodes.io/postcodes/{postcode}/validate")
+    response = req.get(f"https://api.postcodes.io/postcodes/{postcode}/validate", timeout=10)
     if response.status_code == 500:
-        raise req.RequestException("Unable to access API.")  
+        raise req.RequestException("Unable to access API.")
     if response.status_code == 200:
         cache[postcode] = {}
         cache[postcode]['valid'] = response.json().get('result', False)
@@ -42,7 +42,7 @@ def get_postcode_for_location(lat: float, long: float) -> str:
     """Returns a postcode based on longitudinal and latitudinal location."""
     if not isinstance(lat, float) or not isinstance(long, float):
         raise TypeError("Function expects two floats.")
-    response = req.get(f"https://api.postcodes.io/postcodes?lon={long}&lat={lat}")
+    response = req.get(f"https://api.postcodes.io/postcodes?lon={long}&lat={lat}", timeout=10)
     if response.status_code == 500:
         raise req.RequestException("Unable to access API.")
     if response.json()['result'] is None:
@@ -57,7 +57,8 @@ def get_postcode_completions(postcode_start: str) -> list[str]:
     cache = load_cache()
     if postcode_start in cache and 'completions' in cache[postcode_start]:
         return cache[postcode_start]['completions']
-    response = req.get(f"https://api.postcodes.io/postcodes/{postcode_start}/autocomplete")
+    response = req.get(f"https://api.postcodes.io/postcodes/{postcode_start}/autocomplete",
+                        timeout=10)
     if response.status_code == 500:
         raise req.RequestException("Unable to access API.")
     if response.status_code == 200:
@@ -73,9 +74,9 @@ def get_postcodes_details(postcodes: list[str]) -> dict:
         raise TypeError("Function expects a list of strings.")
     for item in postcodes:
         if not isinstance(item, str):
-            raise TypeError("Function expects a list of strings.") 
+            raise TypeError("Function expects a list of strings.")
     response = req.post("https://api.postcodes.io/postcodes",
-                        json={'postcodes': postcodes})
+                        json={'postcodes': postcodes}, timeout=10)
     if response.status_code == 500:
         raise req.RequestException("Unable to access API.")
     return response.json()
